@@ -48,8 +48,8 @@ def viewcount_http(request):
     timeAccessed = datetime.datetime.now()
 
     #initialize new document with data
-    doc_ref = visits_ref.document(str(visits+1))
+    doc_ref = visits_ref.document(str(visits))
     doc_ref.set({'visitID': visits, 'ip' : ip, 'timeAccessed' : timeAccessed})
 
     #return current visit number for counter
-    return ("{}".format(visits+1), 200, headers)
+    return ("{}".format(visits), 200, headers)
