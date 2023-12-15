@@ -1,0 +1,26 @@
+steps:
+  # Step 1: Clone the GitHub repository
+  - name: 'gcr.io/cloud-builders/git'
+    args: ['clone', 'https://github.com/awang265/wangle-cloud-platform-backend.git', 'source'] 
+
+  # Step 2: Install dependencies and run tests
+  - name: 'gcr.io/cloud-builders/python'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        cd source/functions  # Navigate to the cloned repository directory
+        pip install -r requirements.txt # Install necessary dependencies
+        python -m unittest tests.py  # Run tests
+
+  # Step 3: Deploy Cloud Function if tests pass
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if [ $? -eq 0 ]; then  # Check if the previous step (tests) was successful
+          gcloud functions deploy wcp-function --runtime=python312 --trigger-http --project=glassy-ion-406900 --region=us-central1  # Modify with your Cloud Function details
+        else
+          echo "Tests failed. Deployment skipped."
+        fi
