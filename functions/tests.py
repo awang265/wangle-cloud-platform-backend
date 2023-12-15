@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from views import viewcount_http
+from main import viewcount_http
 
 class TestViews(unittest.TestCase):
 
